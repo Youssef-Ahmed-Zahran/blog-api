@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
-const { User } = require("../models/User");
+const { User, validateUpdateUser } = require("../models/User");
 const { Post } = require("../models/Post");
 
 // Http Methods / Verbs
@@ -38,6 +38,11 @@ const getUserById = asyncHandler(async (req, res) => {
  *   @access  private (only admin & User himself)
  */
 const updateUserById = asyncHandler(async (req, res) => {
+  const { error } = validateUpdateUser(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   let updatedUser = await User.findById(req.params.id);
   if (!updatedUser) {
     return res.status(400).json({ message: "user not found" });

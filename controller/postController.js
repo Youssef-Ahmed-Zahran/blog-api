@@ -1,5 +1,9 @@
 const asyncHandler = require("express-async-handler");
-const { Post } = require("../models/Post");
+const {
+  Post,
+  validateCreatePost,
+  validateUpdatePost,
+} = require("../models/Post");
 
 // Http Methods / Verbs
 
@@ -49,6 +53,11 @@ const getPostById = asyncHandler(async (req, res) => {
  *   @access  public
  */
 const createNewPost = asyncHandler(async (req, res) => {
+  const { error } = validateCreatePost(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   const creatPost = new Post(req.body);
 
   const savePost = await creatPost.save();
@@ -63,6 +72,11 @@ const createNewPost = asyncHandler(async (req, res) => {
  *   @access  private (only admin & User himself)
  */
 const updateUserById = asyncHandler(async (req, res) => {
+  const { error } = validateUpdatePost(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   let updatedPost = await Post.findById(req.params.id);
   if (!updatedPost) {
     return res.status(400).json({ message: "user not found" });

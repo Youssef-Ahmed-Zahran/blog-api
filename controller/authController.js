@@ -1,5 +1,9 @@
 const asyncHandler = require("express-async-handler");
-const { User } = require("../models/User");
+const {
+  User,
+  validateRegisterUser,
+  validateLoginUser,
+} = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -10,7 +14,11 @@ const jwt = require("jsonwebtoken");
  *   @access  public
  */
 module.exports.register = asyncHandler(async (req, res) => {
-  // ToDo: validation
+  const { error } = validateRegisterUser(req.body);
+  if (error) {
+    res.status(400).json({ message: error.details[0].message });
+  }
+
   let user = await User.findOne({ email: req.body.email });
   if (user) {
     res.status(400).json({ message: "this user is already exsist!" });
@@ -39,7 +47,11 @@ module.exports.register = asyncHandler(async (req, res) => {
  *   @access  public
  */
 module.exports.login = asyncHandler(async (req, res) => {
-  // ToDo: validation
+  const { error } = validateLoginUser(req.body);
+  if (error) {
+    res.status(400).json({ message: error.details[0].message });
+  }
+
   let user = await User.findOne({ email: req.body.email });
   !user && res.status(400).json({ message: "Wrong credentials!" });
 

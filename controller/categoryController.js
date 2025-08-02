@@ -1,5 +1,9 @@
 const asyncHandler = require("express-async-handler");
-const { Category } = require("../models/Category");
+const {
+  Category,
+  validateCreateCategory,
+  validateUpdateCategory,
+} = require("../models/Category");
 
 // Http Methods / Verbs
 
@@ -36,6 +40,11 @@ const getCategoryById = asyncHandler(async (req, res) => {
  *   @access  private (Only Admin)
  */
 const createCategory = asyncHandler(async (req, res) => {
+  const { error } = validateCreateCategory(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   const newCatg = new Category(req.body);
 
   const savedCatg = await newCatg.save();
@@ -49,6 +58,11 @@ const createCategory = asyncHandler(async (req, res) => {
  *   @access  private (Only Admin)
  */
 const updateCategoryById = asyncHandler(async (req, res) => {
+  const { error } = validateUpdateCategory(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   const category = await Category.findById(req.params.id);
   if (category) {
     const updateCatg = await Category.findByIdAndUpdate(
