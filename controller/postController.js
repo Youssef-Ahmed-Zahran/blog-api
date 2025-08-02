@@ -14,9 +14,10 @@ const getAllPosts = asyncHandler( async (req,res) => {
 
     let posts;
     if (user && catName) {
-        posts = await Post.find({ username, categories: {$in: [catName]} });
+        posts = await Post.find({username, categories: {$in: [catName]}}).populate('user', ["_id", "username"]);
     }  else {
-        posts = await Post.find();
+        posts = await Post.find().populate('user', ["_id", "username"]);
+
     }
 
     res.status(200).json(posts);
@@ -29,7 +30,7 @@ const getAllPosts = asyncHandler( async (req,res) => {
 *   @access  private (only admin & User himself)
 */
 const getPostById = asyncHandler( async (req,res) => {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).populate('user', ["-password"]);
     !post && res.status(400).json({message: "user not found"});
 
     res.status(200).json(post);
