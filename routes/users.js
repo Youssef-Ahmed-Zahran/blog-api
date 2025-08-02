@@ -1,14 +1,23 @@
 const router = require("express").Router();
-const { getAllUsers, getUserById, updateUserById, deleteUserById } = require("../controller/userController");
-
+const {
+  verifyTokenAndAuthorization,
+  verifyTokenAndAdmin,
+} = require("../middlewares/verifyToken");
+const {
+  getAllUsers,
+  getUserById,
+  updateUserById,
+  deleteUserById,
+} = require("../controller/userController");
 
 // api/users
-router.get("/", getAllUsers);
+router.get("/", verifyTokenAndAdmin, getAllUsers);
 
 // api/users/:id
-router.route("/:id")
-.get(getUserById)
-.put(updateUserById)
-.delete(deleteUserById);
+router
+  .route("/:id")
+  .get(verifyTokenAndAuthorization, getUserById)
+  .put(verifyTokenAndAuthorization, updateUserById)
+  .delete(verifyTokenAndAuthorization, deleteUserById);
 
 module.exports = router;
