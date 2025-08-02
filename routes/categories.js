@@ -1,32 +1,21 @@
 const router = require("express").Router();
 const asyncHandler = require("express-async-handler");
 const { Category } = require("../models/Category");
+const  { getAllCategory,
+    getCategoryById,
+    createCategory,
+    updateCategoryById ,
+    deleteCategoryById
+} = require("../controller/categoryController");
 
-// Http Methods / Verbs
-
-/**
-*   @desc   Get All Category
-*   @route  /api/categories
-*   @method  Get
-*   @access  public
-*/
-router.get("/", asyncHandler( async (req,res) => {
-    const categories = await Category.find();
-    res.status(200).json(categories);
-}));
+router.route("/")
+.get(getAllCategory)
+.post(createCategory);
 
 
-/**
-*   @desc   Create New Category
-*   @route  /api/categories
-*   @method  Post
-*   @access  public
-*/
-router.post("/", asyncHandler( async (req,res) => {
-    const newCatg = new Category(req.body);
-
-    const savedCatg = await newCatg.save()
-    res.status(200).json(savedCatg);
-}));
+router.route("/:id")
+.get(getCategoryById)
+.put(updateCategoryById)
+.delete(deleteCategoryById);
 
 module.exports = router;
