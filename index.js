@@ -35,6 +35,10 @@ app.use("/api/posts", require("./routes/posts"));
 app.use("/api/categories", require("./routes/categories"));
 app.use("/api/upload", require("./routes/upload"));
 
+// Error Hander Middleware
+app.use(notFound);
+app.use(errorHanlder);
+
 // Running the server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () =>
