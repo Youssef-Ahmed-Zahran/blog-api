@@ -37,7 +37,7 @@ module.exports.register = asyncHandler(async (req, res) => {
   const token = user.generateToken();
   const { password, ...others } = result._doc;
 
-  res.status(201).json({ others, token });
+  res.status(201).json({ ...others, token });
 });
 
 /**
