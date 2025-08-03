@@ -64,5 +64,5 @@ module.exports.login = asyncHandler(async (req, res) => {
   const token = user.generateToken();
   const { password, ...others } = user._doc;
 
-  res.status(200).json({ others, token });
+  res.status(200).json({ ...others, token });
 });
