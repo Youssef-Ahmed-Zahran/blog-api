@@ -7,8 +7,8 @@ const {
   getAllPosts,
   getPostById,
   createNewPost,
-  updateUserById,
-  deleteUserById,
+  updatePostById,
+  deletePostById,
 } = require("../controller/postController");
 
 router.route("/").get(verifyTokenAndAdmin, getAllPosts).post(createNewPost);
@@ -16,7 +16,7 @@ router.route("/").get(verifyTokenAndAdmin, getAllPosts).post(createNewPost);
 router
   .route("/:id")
   .get(verifyTokenAndAuthorization, getPostById)
-  .put(verifyTokenAndAuthorization, updateUserById)
-  .delete(verifyTokenAndAuthorization, deleteUserById);
+  .put(verifyTokenAndAuthorization, updatePostById)
+  .delete(verifyTokenAndAuthorization, deletePostById);
 
 module.exports = router;

@@ -87,7 +87,6 @@ const updateCategoryById = asyncHandler(async (req, res) => {
 const deleteCategoryById = asyncHandler(async (req, res) => {
   const category = await Category.findById(req.params.id);
   if (category) {
-    const deletedCatg = await Category.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "category has been deleted." });
   } else {
     res.status(400).json({ message: "the category not found!" });

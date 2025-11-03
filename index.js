@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const conectToDB = require("./config/db");
 const path = require("path");
 const logger = require("./middlewares/logger");
@@ -19,7 +18,7 @@ app.use(express.static(path.join(__dirname, "images")));
 
 //Apply Middlewares
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(logger);
 
 // Helmet

@@ -19,7 +19,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
   let posts;
 
   if (user && catName) {
-    posts = await Post.find({ username, categories: { $in: [catName] } })
+    posts = await Post.find({ username: user, categories: { $in: [catName] } })
       .populate("user", ["_id", "username"])
       .populate("categories", ["_id", "name"]);
   } else {
@@ -71,7 +71,7 @@ const createNewPost = asyncHandler(async (req, res) => {
  *   @method  Put
  *   @access  private (only admin & User himself)
  */
-const updateUserById = asyncHandler(async (req, res) => {
+const updatePostById = asyncHandler(async (req, res) => {
   const { error } = validateUpdatePost(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -103,7 +103,7 @@ const updateUserById = asyncHandler(async (req, res) => {
  *   @method  Delete
  *   @access  private (only admin & User himself)
  */
-const deleteUserById = asyncHandler(async (req, res) => {
+const deletePostById = asyncHandler(async (req, res) => {
   let deletedPost = await Post.findById(req.params.id).select("-password");
   if (!deletedPost) {
     return res.status(400).json({ message: "user not found" });
@@ -121,6 +121,6 @@ module.exports = {
   getAllPosts,
   getPostById,
   createNewPost,
-  updateUserById,
-  deleteUserById,
+  updatePostById,
+  deletePostById,
 };

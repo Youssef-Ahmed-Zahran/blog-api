@@ -5,7 +5,6 @@ const {
   validateLoginUser,
 } = require("../models/User");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
 /**
  *   @desc   Register New User
@@ -21,7 +20,7 @@ module.exports.register = asyncHandler(async (req, res) => {
 
   let user = await User.findOne({ email: req.body.email });
   if (user) {
-    res.status(400).json({ message: "this user is already exsist!" });
+    return res.status(400).json({ message: "this user is already exsist!" });
   }
 
   const salt = await bcrypt.genSalt(10);
